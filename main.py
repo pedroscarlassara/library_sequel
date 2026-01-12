@@ -18,15 +18,23 @@ def list_available_books():
     book_list_label_1 = customtkinter.CTkLabel(master=tabview.tab("Book List"), text=cur.fetchall())
     book_list_label_1.pack()
 
+def count_available_books():
+    rows = cur.execute(f"SELECT COUNT(*) FROM {table_name} WHERE status='available'").fetchall()
+    for row in rows:
+        return row[0]
+
+def count_borrowed_books():
+     rows = cur.execute(f"SELECT COUNT(*) FROM {table_name} WHERE status='borrowed'").fetchall()
+     for row in rows:
+        return row[0]
+
+
 # cur.execute(f'''CREATE TABLE {table_name} (
 #     first_name TEXT NOT NULL,
 #     last_name TEXT,
 #     book TEXT NOT NULL,
 #     status TEXT NOT NULL
 #     );''')
- 
-cur.execute(f'''INSERT INTO {table_name} VALUES ('pedro', 'pereira', 'livro_3', 'available')''')
-con.commit()
 
 app = customtkinter.CTk()
 app.geometry("400x300")
@@ -40,6 +48,11 @@ tabview.add("Home")
 home_label_1 = customtkinter.CTkLabel(master=tabview.tab("Home"), text=f"Welcome, {os.getlogin()}.")
 home_label_1.pack()
 
+home_available_books = customtkinter.CTkLabel(master=tabview.tab("Home"), text=f"Available Books: {count_available_books()}")
+home_available_books.pack()
+
+home_borrowed_books = customtkinter.CTkLabel(master=tabview.tab("Home"), text=f"Borrowed Books: {count_borrowed_books()}")
+home_borrowed_books.pack()
 
 tabview.add("Book List")
 
@@ -83,3 +96,6 @@ app.mainloop()
 
 # CRIAR FUNÇÃO DE DEVOLVER
 
+# ADICIONAR CONTADOR NO HOME DE LIVROS EMPRETADOS E LIVROS DISPONIVEIS
+
+# PRO LIST BOOK FAZER UM FETCH ONE DENTRO DE UM FOR PRA FICAR EM LOOP E PULANDO LINHA
