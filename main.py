@@ -6,6 +6,10 @@ app_version = "0.1"
 
 table_name = "Books"
 
+
+textbox_width = 200
+textbox_height = 10
+
 con = sqlite3.connect("library.db")
 cur = con.cursor()
 
@@ -13,9 +17,8 @@ def list_available_books():
     cur.execute(f'''SELECT * FROM {table_name} WHERE status='available' ''')
     book_list_label_1 = customtkinter.CTkLabel(master=tabview.tab("Book List"), text=cur.fetchall())
     book_list_label_1.pack()
-    # talvez seja necessário trocar para fetchall
 
-def borrow_book_function():
+def borrow_available_book():
     print("button pressed")
 
 
@@ -48,11 +51,29 @@ tabview.add("Book List")
 book_list_button_1 = customtkinter.CTkButton(master=tabview.tab("Book List"), command=list_available_books, text="List Available Books")
 book_list_button_1.pack()
 
-
-
-
-
 tabview.add("Borrow Book")
+
+borrow_book_first_name_label = customtkinter.CTkLabel(master=tabview.tab("Borrow Book"), text="First Name")
+borrow_book_first_name_label.pack()
+
+borrow_book_first_name_textbox = customtkinter.CTkTextbox(master=tabview.tab("Borrow Book"), width=textbox_width, height=textbox_height)
+borrow_book_first_name_textbox.pack()
+
+borrow_book_last_name_label = customtkinter.CTkLabel(master=tabview.tab("Borrow Book"), text="Last Name")
+borrow_book_last_name_label.pack()
+
+borrow_book_last_name_textbox = customtkinter.CTkTextbox(master=tabview.tab("Borrow Book"), width=textbox_width, height=textbox_height)
+borrow_book_last_name_textbox.pack()
+
+borrow_book_book_name_label = customtkinter.CTkLabel(master=tabview.tab("Borrow Book"), text="Book Name")
+borrow_book_book_name_label.pack()
+
+borrow_book_book_name_textbox = customtkinter.CTkTextbox(master=tabview.tab("Borrow Book"), width=textbox_width, height=textbox_height)
+borrow_book_book_name_textbox.pack()
+
+borrow_book_button = customtkinter.CTkButton(master=tabview.tab("Borrow Book"), command=borrow_available_book, text="Borrow a Book")
+borrow_book_button.pack()
+
 tabview.set("Home")
 
 app.mainloop()
