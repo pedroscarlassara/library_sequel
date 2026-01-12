@@ -1,9 +1,9 @@
 import customtkinter
 import sqlite3
 import os
+import datetime
 
 table_name = "Books"
-
 textbox_width = 200
 textbox_height = 10
 
@@ -11,11 +11,11 @@ con = sqlite3.connect("library.db")
 cur = con.cursor()
 
 def list_available_books():
-    books_list = cur.execute(f"SELECT * FROM {table_name} WHERE status='available'").fetchall()
+    books_list = cur.execute(f"SELECT book FROM {table_name} WHERE status='available'").fetchall()
+    book_list_label_1 = customtkinter.CTkLabel(master=tabview.tab("Book List"), text="")
+    book_list_label_1.pack()
     for book in books_list:
-        print(book)
-        book_list_label_1 = customtkinter.CTkLabel(master=tabview.tab("Book List"), text=book)
-        book_list_label_1.pack()
+        book_list_label_1.configure(text=book[0])
 
 def count_available_books():
     rows = cur.execute(f"SELECT COUNT(*) FROM {table_name} WHERE status='available'").fetchall()
@@ -27,12 +27,13 @@ def count_borrowed_books():
      for row in rows:
         return row[0]
 
-
 # cur.execute(f'''CREATE TABLE {table_name} (
 #     first_name TEXT NOT NULL,
 #     last_name TEXT,
 #     book TEXT NOT NULL,
-#     status TEXT NOT NULL
+#     status TEXT NOT NULL,
+#     date TEXT NOT NULL DEFAULT "unknown"
+#       
 #     );''')
 
 app = customtkinter.CTk()
@@ -82,7 +83,7 @@ def borrow_available_book():
     first_name = borrow_book_first_name_textbox.get("0.0", "end")
     last_name = borrow_book_last_name_textbox.get("0.0", "end")
     book_name = borrow_book_book_name_textbox.get("0.0", "end")
-    cur.execute(f'''INSERT INTO {table_name} VALUES ('{first_name}', '{last_name}', '{book_name}' , 'borrowed')''')
+    cur.execute(f'''INSERT INTO {table_name} VALUES ('{first_name}', '{last_name}', '{book_name}' , 'borrowed', '{datetime.date.today()}')''')
     con.commit()
 
 borrow_book_button = customtkinter.CTkButton(master=tabview.tab("Borrow Book"), command=borrow_available_book, text="Borrow a Book")
@@ -112,20 +113,13 @@ def return_borrowed_book():
     first_name = return_book_first_name_textbox.get("0.0", "end")
     last_name = return_book_last_name_textbox.get("0.0", "end")
     book_name = return_book_book_name_textbox.get("0.0", "end")
-    cur.execute(f'''INSERT INTO {table_name} VALUES ('{first_name}', '{last_name}', '{book_name}' , 'available')''')
+    cur.execute(f'''INSERT INTO {table_name} VALUES ('{first_name}', '{last_name}', '{book_name}' , 'available', '{datetime.date.today()}')''')
     con.commit()
 
 return_book_button = customtkinter.CTkButton(master=tabview.tab("Return Book"), text="Return a Book", command=return_borrowed_book)
-
+return_book_button.pack()
 
 
 tabview.set("Home")
 
 app.mainloop()
-
-
-
-# TANTO NA FUNÇÃO DE DEVOLVER E COMO NA DE EMPRESTAR, DEVE DELETAR O REGISTRO ANTIGO PORQUE SE NAO TERÁ NA TABELA QUE O LIVRO ESTÁ DISPONIVEL E OCUPADO AO MESMO TEMPO, ALÉM DISSO COLOCAR UM ROW DE QUANDO O LIVRO FOI OBTIDO.
-
-
-# PRO LIST BOOK FAZER UM FETCH ONE DENTRO DE UM FOR PRA FICAR EM LOOP E PULANDO LINHA
