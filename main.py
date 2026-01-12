@@ -84,6 +84,7 @@ def borrow_available_book():
     last_name = borrow_book_last_name_textbox.get("0.0", "end")
     book_name = borrow_book_book_name_textbox.get("0.0", "end")
     cur.execute(f'''INSERT INTO {table_name} VALUES ('{first_name}', '{last_name}', '{book_name}' , 'borrowed')''')
+    con.commit()
 
 borrow_book_button = customtkinter.CTkButton(master=tabview.tab("Borrow Book"), command=borrow_available_book, text="Borrow a Book")
 borrow_book_button.pack()
@@ -92,10 +93,6 @@ tabview.set("Home")
 
 app.mainloop()
 
-# CRIAR  FUNÇÃO DE EMPRESTAR LIVRO
-
 # CRIAR FUNÇÃO DE DEVOLVER
-
-# ADICIONAR CONTADOR NO HOME DE LIVROS EMPRETADOS E LIVROS DISPONIVEIS
 
 # PRO LIST BOOK FAZER UM FETCH ONE DENTRO DE UM FOR PRA FICAR EM LOOP E PULANDO LINHA
