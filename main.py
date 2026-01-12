@@ -2,10 +2,7 @@ import customtkinter
 import sqlite3
 import os
 
-app_version = "0.1"
-
 table_name = "Books"
-
 
 textbox_width = 200
 textbox_height = 10
@@ -14,9 +11,11 @@ con = sqlite3.connect("library.db")
 cur = con.cursor()
 
 def list_available_books():
-    cur.execute(f'''SELECT * FROM {table_name} WHERE status='available' ''')
-    book_list_label_1 = customtkinter.CTkLabel(master=tabview.tab("Book List"), text=cur.fetchall())
-    book_list_label_1.pack()
+    books_list = cur.execute(f"SELECT * FROM {table_name} WHERE status='available'").fetchall()
+    for book in books_list:
+        print(book)
+        book_list_label_1 = customtkinter.CTkLabel(master=tabview.tab("Book List"), text=book)
+        book_list_label_1.pack()
 
 def count_available_books():
     rows = cur.execute(f"SELECT COUNT(*) FROM {table_name} WHERE status='available'").fetchall()
