@@ -18,20 +18,15 @@ def list_available_books():
     book_list_label_1 = customtkinter.CTkLabel(master=tabview.tab("Book List"), text=cur.fetchall())
     book_list_label_1.pack()
 
-def borrow_available_book():
-    print("button pressed")
-
-
-# """ cur.execute(f'''CREATE TABLE {table_name} (
-#     customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+# cur.execute(f'''CREATE TABLE {table_name} (
 #     first_name TEXT NOT NULL,
 #     last_name TEXT,
 #     book TEXT NOT NULL,
 #     status TEXT NOT NULL
 #     );''')
-#  """
-# cur.execute(f'''INSERT INTO {table_name} VALUES (3, 'pedro', 'pereira', 'livro_3', 'available')''')
-# con.commit()
+ 
+cur.execute(f'''INSERT INTO {table_name} VALUES ('pedro', 'pereira', 'livro_3', 'available')''')
+con.commit()
 
 app = customtkinter.CTk()
 app.geometry("400x300")
@@ -70,6 +65,12 @@ borrow_book_book_name_label.pack()
 
 borrow_book_book_name_textbox = customtkinter.CTkTextbox(master=tabview.tab("Borrow Book"), width=textbox_width, height=textbox_height)
 borrow_book_book_name_textbox.pack()
+
+def borrow_available_book():
+    first_name = borrow_book_first_name_textbox.get("0.0", "end")
+    last_name = borrow_book_last_name_textbox.get("0.0", "end")
+    book_name = borrow_book_book_name_textbox.get("0.0", "end")
+    cur.execute(f'''INSERT INTO {table_name} VALUES ('{first_name}', '{last_name}', '{book_name}' , 'borrowed')''')
 
 borrow_book_button = customtkinter.CTkButton(master=tabview.tab("Borrow Book"), command=borrow_available_book, text="Borrow a Book")
 borrow_book_button.pack()
