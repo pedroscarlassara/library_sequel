@@ -29,7 +29,7 @@ CREATE TABLE Books (
     last_name TEXT,
     book TEXT NOT NULL,
     status TEXT NOT NULL,
-    date TEXT NOT NULL DEFAULT "unknown"
+    date TEXT NOT NULL DEFAULT 'unknown'
 );
 ```
 
