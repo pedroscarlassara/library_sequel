@@ -88,10 +88,44 @@ def borrow_available_book():
 borrow_book_button = customtkinter.CTkButton(master=tabview.tab("Borrow Book"), command=borrow_available_book, text="Borrow a Book")
 borrow_book_button.pack()
 
+tabview.add("Return Book")
+
+return_book_first_name_label = customtkinter.CTkLabel(master=tabview.tab("Return Book"), text="First Name")
+return_book_first_name_label.pack()
+
+return_book_first_name_textbox = customtkinter.CTkTextbox(master=tabview.tab("Return Book"), width=textbox_width, height=textbox_height)
+return_book_first_name_textbox.pack()
+
+return_book_last_name_label = customtkinter.CTkLabel(master=tabview.tab("Return Book"), text="Last Name")
+return_book_last_name_label.pack()
+
+return_book_last_name_textbox = customtkinter.CTkTextbox(master=tabview.tab("Return Book"), width=textbox_width, height=textbox_height)
+return_book_last_name_textbox.pack()
+
+return_book_book_name_label = customtkinter.CTkLabel(master=tabview.tab("Return Book"), text="Book Name")
+return_book_book_name_label.pack()
+
+return_book_book_name_textbox = customtkinter.CTkTextbox(master=tabview.tab("Return Book"), width=textbox_width, height=textbox_height)
+return_book_book_name_textbox.pack()
+
+def return_borrowed_book():
+    first_name = return_book_first_name_textbox.get("0.0", "end")
+    last_name = return_book_last_name_textbox.get("0.0", "end")
+    book_name = return_book_book_name_textbox.get("0.0", "end")
+    cur.execute(f'''INSERT INTO {table_name} VALUES ('{first_name}', '{last_name}', '{book_name}' , 'available')''')
+    con.commit()
+
+return_book_button = customtkinter.CTkButton(master=tabview.tab("Return Book"), text="Return a Book", command=return_borrowed_book)
+
+
+
 tabview.set("Home")
 
 app.mainloop()
 
-# CRIAR FUNÇÃO DE DEVOLVER
+
+
+# TANTO NA FUNÇÃO DE DEVOLVER E COMO NA DE EMPRESTAR, DEVE DELETAR O REGISTRO ANTIGO PORQUE SE NAO TERÁ NA TABELA QUE O LIVRO ESTÁ DISPONIVEL E OCUPADO AO MESMO TEMPO, ALÉM DISSO COLOCAR UM ROW DE QUANDO O LIVRO FOI OBTIDO.
+
 
 # PRO LIST BOOK FAZER UM FETCH ONE DENTRO DE UM FOR PRA FICAR EM LOOP E PULANDO LINHA
