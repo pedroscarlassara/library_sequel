@@ -117,7 +117,7 @@ def borrow_available_book():
         con.commit()
         borrow_book_warning_label.configure(text=f"You borrowed the book {book_name}.")
     else:
-        borrow_book_warning_label.configure(text=f"You can't borrow the book: {borrow_name}")
+        borrow_book_warning_label.configure(text=f"You can't borrow the book: {book_name}")
     
 
 borrow_book_button = customtkinter.CTkButton(master=tabview.tab("Borrow Book"), command=borrow_available_book, text="Borrow a Book")
