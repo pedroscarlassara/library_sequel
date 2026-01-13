@@ -101,7 +101,7 @@ borrow_book_book_name_textbox = customtkinter.CTkTextbox(master=tabview.tab("Bor
 borrow_book_book_name_textbox.pack()
 
 def borrow_available_book():
-    email_address = borrow_book_email_label
+    email_address = borrow_book_email_textbox.get("0.0", "end").strip()
     customer_id = borrow_book_customer_id_textbox.get("0.0", "end").strip()
     first_name = borrow_book_first_name_textbox.get("0.0", "end").strip()
     last_name = borrow_book_last_name_textbox.get("0.0", "end").strip()
@@ -111,6 +111,7 @@ def borrow_available_book():
     is_available = cur.execute(f'''SELECT status FROM customers WHERE book_id='{book_id[0]}' and status=1''').fetchall()
 
     borrow_book_warning_label = customtkinter.CTkLabel(master=tabview.tab("Borrow Book"), text="")
+    borrow_book_warning_label.pack()
 
     if is_available == []:
         cur.execute(f'''INSERT INTO customers VALUES ({customer_id}, {book_id[0]}, '{first_name}', '{last_name}', '{email_address}', 1) ''')
