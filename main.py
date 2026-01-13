@@ -11,17 +11,6 @@ textbox_height = 10
 con = sqlite3.connect("database.db")
 cur = con.cursor()
 
-# cur.execute(f'''CREATE TABLE {customers_table_name} (
-#     first_name TEXT NOT NULL,
-#     last_name TEXT,
-#     book_name TEXT NOT NULL,
-#     book_book_status TEXT NOT NULL,
-#     date TEXT NOT NULL DEFAULT "unknown"
-#     );''')
-
-# cur.execute(f'''CREATE TABLE {books_table_name} (
-#         book_name TEXT NOT NULL PRIMARY KEY)''')
-
 
 def list_available_books():
     books_list = cur.execute(f"SELECT b.book_name FROM books b JOIN customers c ON c.book_id = b.book_id WHERE c.status=0").fetchall()
@@ -101,7 +90,7 @@ borrow_book_book_name_textbox = customtkinter.CTkTextbox(master=tabview.tab("Bor
 borrow_book_book_name_textbox.pack()
 
 def borrow_available_book():
-    email_address = borrow_book_email_label
+    email_address = borrow_book_email_textbox.get("0.0", "end").strip()
     customer_id = borrow_book_customer_id_textbox.get("0.0", "end").strip()
     first_name = borrow_book_first_name_textbox.get("0.0", "end").strip()
     last_name = borrow_book_last_name_textbox.get("0.0", "end").strip()
@@ -111,13 +100,14 @@ def borrow_available_book():
     is_available = cur.execute(f'''SELECT status FROM customers WHERE book_id='{book_id[0]}' and status=1''').fetchall()
 
     borrow_book_warning_label = customtkinter.CTkLabel(master=tabview.tab("Borrow Book"), text="")
+    borrow_book_warning_label.pack()
 
     if is_available == []:
         cur.execute(f'''INSERT INTO customers VALUES ({customer_id}, {book_id[0]}, '{first_name}', '{last_name}', '{email_address}', 1) ''')
         con.commit()
         borrow_book_warning_label.configure(text=f"You borrowed the book {book_name}.")
     else:
-        borrow_book_warning_label.configure(text=f"You can't borrow the book: {borrow_name}")
+        borrow_book_warning_label.configure(text=f"You can't borrow the book: {book_name}")
     
 
 borrow_book_button = customtkinter.CTkButton(master=tabview.tab("Borrow Book"), command=borrow_available_book, text="Borrow a Book")
@@ -162,7 +152,6 @@ def return_borrowed_book():
     return_book_warning_label.pack()
 
     if is_borrowed == []:
-        print("este livro não pode ser retornado, nunca foi emprestado.")
         return_book_warning_label.configure(text=f"The book {book_name} never was borrowed.")
     else:
         cur.execute(f'''DELETE FROM {customer_table_name} WHERE book_id='{book_id[0]}' AND status=1''').fetchall()
