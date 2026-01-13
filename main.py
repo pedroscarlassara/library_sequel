@@ -11,6 +11,18 @@ textbox_height = 10
 con = sqlite3.connect("database.db")
 cur = con.cursor()
 
+# cur.execute(f'''CREATE TABLE {customers_table_name} (
+#     first_name TEXT NOT NULL,
+#     last_name TEXT,
+#     book_name TEXT NOT NULL,
+#     book_book_status TEXT NOT NULL,
+#     date TEXT NOT NULL DEFAULT "unknown"
+#     );''')
+
+# cur.execute(f'''CREATE TABLE {books_table_name} (
+#         book_name TEXT NOT NULL PRIMARY KEY)''')
+
+
 def list_available_books():
     books_list = cur.execute(f"SELECT b.book_name FROM books b JOIN customers c ON c.book_id = b.book_id WHERE c.status=0").fetchall()
     book_list_label_1 = customtkinter.CTkLabel(master=tabview.tab("Book List"), text="")
